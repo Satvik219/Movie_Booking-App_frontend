@@ -1325,6 +1325,8 @@ function AddShowForm({ onSuccess }) {
   const [loading,   setLoading]   = useState(false);
   const [movies,    setMovies]    = useState([]);
   const [theatres,  setTheatres]  = useState([]);
+  const [screens,   setScreens]   = useState([]);
+  const [loadingT,  setLoadingT]  = useState(false);
   const blank = { movieId:"", theatreId:"", screenId:"", showDate:"", startTime:"", silverPrice:"", goldPrice:"", platinumPrice:"", reclinerPrice:"" };
   const [form, setForm] = useState(blank);
   const set = k => e => setForm(p => ({ ...p, [k]: e.target.value }));
@@ -1335,7 +1337,15 @@ function AddShowForm({ onSuccess }) {
   }, []);
 
   // Load screens when theatre changes
-
+  useEffect(() => {
+    if (!form.theatreId) { setScreens([]); return; }
+    setLoadingT(true);
+    // Screens come from theatre object — find the selected theatre
+    const t = theatres.find(th => String(th.id) === String(form.theatreId));
+    setScreens(t?.screens || []);
+    setLoadingT(false);
+    setForm(p => ({ ...p, screenId: "" }));
+  }, [form.theatreId, theatres]);
 
   const submit = async () => {
     if (!form.movieId || !form.theatreId || !form.screenId || !form.showDate || !form.startTime) {
@@ -1377,16 +1387,12 @@ function AddShowForm({ onSuccess }) {
           {theatres.map(t => <option key={t.id} value={t.id}>{t.name} — {t.city}</option>)}
         </select>
       </Field>
-      <Field label="Screen Number *">
-  <input
-    className="inp"
-    type="number"
-    placeholder="e.g. 1"
-    value={form.screenId}
-    onChange={set("screenId")}
-    disabled={!form.theatreId}
-  />
-</Field>
+      <Field label="Screen *">
+        <select className="inp" value={form.screenId} onChange={set("screenId")} style={{ cursor: "pointer" }} disabled={!form.theatreId}>
+          <option value="">{form.theatreId ? "Select a screen…" : "Select theatre first"}</option>
+          {screens.map(s => <option key={s.id} value={s.id}>{s.name} ({s.type})</option>)}
+        </select>
+      </Field>
       <Row>
         <Field label="Show Date *"><input className="inp" type="date" value={form.showDate} onChange={set("showDate")}/></Field>
         <Field label="Start Time *"><input className="inp" type="time" value={form.startTime} onChange={set("startTime")}/></Field>
