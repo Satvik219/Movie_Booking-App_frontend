@@ -62,6 +62,8 @@ const CSS = `
   --green: #4ade80;
   --gold: #f5c518;
   --blue: #60a5fa;
+  /* responsive gutters */
+  --gutter: clamp(16px, 4vw, 52px);
 }
 html, body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
 * { -webkit-font-smoothing: antialiased; }
@@ -94,7 +96,9 @@ input, textarea, select, button { font-family: 'DM Sans', sans-serif; }
   position: relative; border-radius: 9px; overflow: hidden; cursor: pointer; flex-shrink: 0;
   transition: transform .35s cubic-bezier(.25,.46,.45,.94), box-shadow .35s ease;
 }
-.mcard:hover { transform: scale(1.07) translateY(-8px); box-shadow: 0 32px 80px rgba(0,0,0,.9); z-index: 10; }
+@media(hover:hover){
+  .mcard:hover { transform: scale(1.07) translateY(-8px); box-shadow: 0 32px 80px rgba(0,0,0,.9); z-index: 10; }
+}
 
 /* ── Row scroll ── */
 .hrow { display: flex; gap: 14px; overflow-x: auto; padding: 10px 0 20px; scrollbar-width: none; }
@@ -121,6 +125,10 @@ input, textarea, select, button { font-family: 'DM Sans', sans-serif; }
 .btn-md   { padding: 12px 28px; font-size: 15px; }
 .btn-lg   { padding: 15px 38px; font-size: 17px; }
 .btn-icon { padding: 8px; border-radius: 50%; aspect-ratio: 1; }
+
+@media(max-width:480px){
+  .btn-lg { padding: 13px 24px; font-size: 15px; }
+}
 
 /* ── Inputs ── */
 .inp {
@@ -150,6 +158,9 @@ input, textarea, select, button { font-family: 'DM Sans', sans-serif; }
 .nav-link:hover { color: #fff; }
 .nav-link.active { color: #fff; font-weight: 700; }
 
+/* hide nav text links on mobile — show only in hamburger menu */
+@media(max-width:640px){ .nav-links-desktop { display: none !important; } }
+
 /* ── Glass card ── */
 .glass { background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.06); border-radius: 14px; }
 
@@ -160,8 +171,17 @@ input, textarea, select, button { font-family: 'DM Sans', sans-serif; }
 .tbl tr:last-child td { border-bottom: none; }
 .tbl tr:hover td { background: rgba(255,255,255,.018); }
 
+/* table → card list on mobile */
+@media(max-width:640px){
+  .tbl, .tbl thead, .tbl tbody, .tbl tr, .tbl th, .tbl td { display: block; width: 100%; }
+  .tbl thead { display: none; }
+  .tbl tr { border-bottom: 1px solid var(--border); padding: 12px 14px; }
+  .tbl td { padding: 4px 0; border: none; font-size: 13px; }
+}
+
 /* ── Seat ── */
-.seat { width: 32px; height: 26px; border-radius: 5px 5px 9px 9px; border: none; font-size: 8.5px; font-weight: 800; cursor: pointer; transition: transform .14s, opacity .14s; font-family: 'DM Sans', sans-serif; color: #fff; }
+.seat { width: 28px; height: 23px; border-radius: 5px 5px 9px 9px; border: none; font-size: 7.5px; font-weight: 800; cursor: pointer; transition: transform .14s, opacity .14s; font-family: 'DM Sans', sans-serif; color: #fff; }
+@media(min-width:480px){ .seat { width: 32px; height: 26px; font-size: 8.5px; } }
 .seat:hover:not(:disabled) { transform: scale(1.18); }
 .seat:disabled { cursor: not-allowed; opacity: .3; }
 
@@ -182,10 +202,62 @@ input, textarea, select, button { font-family: 'DM Sans', sans-serif; }
   position: fixed; inset: 0; background: rgba(0,0,0,.9); backdrop-filter: blur(14px);
   z-index: 800; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;
 }
+@media(max-width:640px){
+  .modal-bg { padding: 12px; align-items: flex-end; }
+}
 
 /* ── Misc ── */
 .ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-`;
+
+/* ── Responsive grid helpers ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+@media(max-width:640px){
+  .grid-2 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Admin layout ── */
+@media(max-width:768px){
+  .admin-layout { flex-direction: column !important; }
+  .admin-sidebar { width: 100% !important; padding-top: 16px !important; display: flex !important; flex-wrap: wrap !important; gap: 6px !important; }
+  .admin-sidebar button { flex: 1 !important; min-width: 80px !important; justify-content: center !important; }
+  .admin-content { padding-left: 0 !important; }
+  .admin-stats { display: none !important; }
+  .admin-header { flex-wrap: wrap !important; gap: 12px !important; padding: 20px var(--gutter) 18px !important; }
+}
+
+/* ── Mobile bottom booking bar ── */
+@media(max-width:640px){
+  .booking-bar { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; padding: 16px 20px !important; }
+  .booking-bar .btn { width: 100%; justify-content: center; }
+}
+
+/* ── Hero responsive ── */
+@media(max-width:640px){
+  .hero-content { padding: 0 20px 60px !important; }
+  .hero-actions { flex-wrap: wrap !important; }
+}
+
+/* ── MoviePage hero ── */
+@media(max-width:640px){
+  .movie-hero-inner { flex-direction: column !important; align-items: flex-start !important; padding: 0 20px 28px !important; gap: 16px !important; }
+  .movie-hero-poster { display: none !important; }
+  .movie-page-body { padding: 28px 20px 80px !important; }
+}
+@media(min-width:641px) and (max-width:900px){
+  .movie-hero-inner { padding: 0 28px 32px !important; }
+  .movie-page-body { padding: 32px 28px 80px !important; }
+}
+
+/* ── Bookings page ── */
+@media(max-width:640px){
+  .bookings-page { padding: 88px 16px 80px !important; }
+  .booking-card-details { flex-direction: column !important; gap: 16px !important; }
+}
+`
 
 /* ─────────────────────── ICONS ──────────────────────────────────── */
 const mkIcon = (d, fill = false) =>
@@ -372,8 +444,9 @@ const SectionTitle = ({ children }) => (
   <h2 style={{ fontSize: 20, fontWeight: 800, color: "#ddd", display: "flex", alignItems: "center", gap: 10 }}>{children}</h2>
 );
 
-const Row = ({ children, cols = "1fr 1fr" }) => (
-  <div style={{ display: "grid", gridTemplateColumns: cols, gap: 18 }}>{children}</div>
+const Row = ({ children, cols = "1fr 1fr", mobileStack = true }) => (
+  <div style={{ display: "grid", gridTemplateColumns: cols, gap: 18 }}
+    className={mobileStack ? "grid-2" : ""}>{children}</div>
 );
 
 /* ────────────────────── MODAL ───────────────────────────────────── */
@@ -382,7 +455,8 @@ const Modal = ({ onClose, children, maxW = 540 }) => (
     <div className="scale-in" style={{
       background: "#0e0e0e", border: "1px solid #1e1e1e", borderRadius: 20,
       width: "100%", maxWidth: maxW, position: "relative",
-      maxHeight: "92vh", overflowY: "auto", overflowX: "hidden",
+      maxHeight: "92dvh", overflowY: "auto", overflowX: "hidden",
+      borderBottomLeftRadius: "20px", borderBottomRightRadius: "20px",
     }}>
       <button onClick={onClose} style={{
         position: "absolute", top: 14, right: 14, background: "#1a1a1a",
@@ -456,7 +530,7 @@ function MovieRow({ title, movies = [], loading, onMovieClick }) {
   const scroll = dir => rowRef.current?.scrollBy({ left: dir * 600, behavior: "smooth" });
   return (
     <div style={{ marginBottom: 44 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 52px", marginBottom: 8 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 var(--gutter)", marginBottom: 8 }}>
         <SectionTitle>{title}</SectionTitle>
         <div style={{ display: "flex", gap: 6 }}>
           {[-1, 1].map(dir => (
@@ -466,7 +540,7 @@ function MovieRow({ title, movies = [], loading, onMovieClick }) {
           ))}
         </div>
       </div>
-      <div ref={rowRef} className="hrow" style={{ padding: "10px 52px 20px" }}>
+      <div ref={rowRef} className="hrow" style={{ padding: "10px var(--gutter) 20px" }}>
         {loading
           ? [...Array(7)].map((_, i) => <Skel key={i} w={178} h={267} style={{ flexShrink: 0 }}/>)
           : movies.map(m => <MovieCard key={m.id} movie={m} onClick={() => onMovieClick(m)}/>)
@@ -488,20 +562,20 @@ function HeroBanner({ movie, onBook, onInfo }) {
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(6,6,6,.98) 0%, rgba(6,6,6,.72) 42%, rgba(6,6,6,.1) 100%)" }}/>
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "52%", background: "linear-gradient(to top, #060606, transparent)" }}/>
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "25%", background: "linear-gradient(to bottom, rgba(6,6,6,.6), transparent)" }}/>
-      <div className="fade-up" style={{ position: "absolute", bottom: 0, left: 0, padding: "0 56px 76px", maxWidth: 660 }}>
+      <div className="fade-up hero-content" style={{ position: "absolute", bottom: 0, left: 0, padding: "0 56px 76px", maxWidth: 660 }}>
         <div style={{ display: "flex", gap: 8, marginBottom: 18, flexWrap: "wrap" }}>
           {movie.certificate && <span style={{ background: "#e50914", color: "#fff", fontSize: 10, fontWeight: 800, padding: "3px 10px", borderRadius: 4, letterSpacing: 1 }}>{movie.certificate}</span>}
           {movie.genre       && <span style={{ border: "1px solid rgba(255,255,255,.2)", color: "#ccc", fontSize: 12, padding: "3px 10px", borderRadius: 4, backdropFilter: "blur(4px)" }}>{movie.genre}</span>}
           {movie.language    && <span style={{ border: "1px solid rgba(255,255,255,.12)", color: "#999", fontSize: 12, padding: "3px 10px", borderRadius: 4 }}>{movie.language}</span>}
         </div>
-        <h1 className="display" style={{ fontSize: "clamp(44px, 7.5vw, 90px)", lineHeight: .9, marginBottom: 18, textShadow: "0 4px 32px rgba(0,0,0,.6)" }}>{movie.title}</h1>
+        <h1 className="display" style={{ fontSize: "clamp(32px, 7.5vw, 90px)", lineHeight: .9, marginBottom: 18, textShadow: "0 4px 32px rgba(0,0,0,.6)" }}>{movie.title}</h1>
         <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 20, fontSize: 14, color: "#aaa", flexWrap: "wrap" }}>
           {movie.rating          && <span style={{ display: "flex", alignItems: "center", gap: 5, color: "#f5c518", fontWeight: 800 }}><ICONS.Star s={15} color="#f5c518"/>{movie.rating.toFixed(1)}</span>}
           {movie.durationMinutes && <span style={{ display: "flex", alignItems: "center", gap: 5 }}><ICONS.Clock s={13}/>{movie.durationMinutes} min</span>}
           {movie.director        && <span>Dir: <strong style={{ color: "#ddd" }}>{movie.director}</strong></span>}
         </div>
         <p style={{ color: "#888", fontSize: 15, lineHeight: 1.75, marginBottom: 30, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{movie.description}</p>
-        <div style={{ display: "flex", gap: 14 }}>
+        <div className="hero-actions" style={{ display: "flex", gap: 14 }}>
           <button className="btn btn-red btn-lg" onClick={onBook}><ICONS.Play s={20}/> Book Now</button>
           <button className="btn btn-ghost btn-lg" onClick={onInfo}><ICONS.Info s={20}/> More Info</button>
         </div>
@@ -538,7 +612,7 @@ function AuthModal({ onClose }) {
 
   return (
     <Modal onClose={onClose}>
-      <div style={{ padding: "48px 44px 42px" }}>
+      <div style={{ padding: "clamp(24px, 5vw, 48px) clamp(20px, 5vw, 44px) 42px" }}>
         <div style={{ textAlign: "center", marginBottom: 36 }}>
           <div className="display" style={{ fontSize: 30, letterSpacing: 5, color: "#e50914", marginBottom: 8 }}>CINEBOOK</div>
           <h2 style={{ fontSize: 23, fontWeight: 800, marginBottom: 5 }}>{mode === "login" ? "Welcome back" : "Join CineBook"}</h2>
@@ -585,8 +659,8 @@ function Navbar({ onAuthOpen }) {
 
   return (
     <nav style={{
-      position: "fixed", top: 0, left: 0, right: 0, zIndex: 600, height: 68,
-      display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 52px",
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 600, height: 60,
+      display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 var(--gutter)",
       background: scrolled ? "rgba(6,6,6,.97)" : "linear-gradient(to bottom, rgba(0,0,0,.7), transparent)",
       backdropFilter: scrolled ? "blur(18px)" : "none",
       borderBottom: scrolled ? "1px solid rgba(255,255,255,.04)" : "none",
@@ -595,7 +669,7 @@ function Navbar({ onAuthOpen }) {
       <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
         <div onClick={() => go("home")} className="display" style={{ fontSize: 28, letterSpacing: 4, color: "#e50914", cursor: "pointer", userSelect: "none" }}>CINEBOOK</div>
         {user && (
-          <div style={{ display: "flex", gap: 2 }}>
+          <div className="nav-links-desktop" style={{ display: "flex", gap: 2 }}>
             <button className={`nav-link ${page === "home"     ? "active" : ""}`} onClick={() => go("home")}><ICONS.Home s={15}/> Home</button>
             <button className={`nav-link ${page === "bookings" ? "active" : ""}`} onClick={() => go("bookings")}><ICONS.Ticket s={15}/> My Bookings</button>
             {isAdmin && <button className={`nav-link ${page === "admin" ? "active" : ""}`} onClick={() => go("admin")}><ICONS.Shield s={15}/> Admin</button>}
@@ -675,7 +749,7 @@ function PreviewModal({ movie, onClose, onBookNow }) {
 
   return (
     <Modal onClose={onClose} maxW={860}>
-      <div style={{ position: "relative", height: 360, overflow: "hidden", borderRadius: "20px 20px 0 0" }}>
+      <div style={{ position: "relative", height: "clamp(200px, 40vw, 360px)", overflow: "hidden", borderRadius: "20px 20px 0 0" }}>
         {movie.posterUrl
           ? <img src={movie.posterUrl} alt={movie.title} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%" }}/>
           : <div style={{ width: "100%", height: "100%", background: "#0e0e0e" }}/>
@@ -690,8 +764,8 @@ function PreviewModal({ movie, onClose, onBookNow }) {
         </div>
       </div>
       <div style={{ padding: "22px 28px 28px" }}>
-        <div style={{ display: "flex", gap: 28 }}>
-          <div style={{ flex: 1 }}>
+        <div style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
+          <div style={{ flex: 1, minWidth: 200 }}>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginBottom: 14 }}>
               {movie.rating      && <span style={{ color: "#4ade80", fontWeight: 800, fontSize: 15 }}>{Math.round(movie.rating * 10)}% Match</span>}
               {movie.certificate && <span style={{ border: "1px solid #282828", color: "#ccc", fontSize: 11, padding: "2px 7px", borderRadius: 3 }}>{movie.certificate}</span>}
@@ -700,7 +774,7 @@ function PreviewModal({ movie, onClose, onBookNow }) {
             </div>
             <p style={{ color: "#bbb", fontSize: 14, lineHeight: 1.75 }}>{movie.description || "No description available."}</p>
           </div>
-          <div style={{ width: 185, flexShrink: 0, fontSize: 13, lineHeight: 2.4 }}>
+          <div style={{ width: "clamp(130px, 18vw, 185px)", flexShrink: 0, fontSize: 13, lineHeight: 2.4 }}>
             {[["Director", movie.director], ["Cast", movie.cast], ["Language", movie.language]].map(([l, v]) => (
               <div key={l}><span style={{ color: "#383838" }}>{l}: </span><span style={{ color: "#ccc" }}>{v || "—"}</span></div>
             ))}
@@ -782,7 +856,7 @@ function SeatMap({ showId, onSeatsChange }) {
         }}/>
         <div style={{ color: "#2e2e2e", fontSize: 11, letterSpacing: 7, textTransform: "uppercase" }}>All Eyes Here</div>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 7, alignItems: "center" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 7, alignItems: "center", overflowX: "auto", WebkitOverflowScrolling: "touch", paddingBottom: 4 }}>
         {Object.entries(grouped).sort().map(([row, rowSeats]) => (
           <div key={row} style={{ display: "flex", gap: 5, alignItems: "center" }}>
             <span style={{ color: "#252525", fontSize: 11, width: 22, textAlign: "right", marginRight: 8 }}>{row}</span>
@@ -862,7 +936,7 @@ function HomePage({ onAuthRequired }) {
       {!loading && hero && (
         <HeroBanner movie={hero} onBook={() => navigate("movie", { movie: hero })} onInfo={() => setPreview(hero)}/>
       )}
-      <div style={{ padding: "24px 52px 12px", display: "flex", gap: 14, flexWrap: "wrap", alignItems: "center" }}>
+      <div style={{ padding: "24px var(--gutter) 12px", display: "flex", gap: 14, flexWrap: "wrap", alignItems: "center" }}>
         <div style={{ position: "relative", flex: "0 0 270px" }}>
           <div style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "#444", pointerEvents: "none" }}><ICONS.Search s={16}/></div>
           <input className="inp" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search movies…" style={{ paddingLeft: 40, height: 42, fontSize: 14 }}/>
@@ -875,11 +949,11 @@ function HomePage({ onAuthRequired }) {
       </div>
 
       {search || genre !== "All" ? (
-        <div style={{ padding: "12px 52px 80px" }}>
+        <div style={{ padding: "12px var(--gutter) 80px" }}>
           <p style={{ color: "#383838", fontSize: 13, marginBottom: 22 }}>{filtered.length} result{filtered.length !== 1 ? "s" : ""}</p>
           {filtered.length === 0
             ? <Empty icon="🔍" title="Nothing matched" sub="Try a different title or genre"/>
-            : <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(165px, 1fr))", gap: 12 }}>
+            : <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12 }}>
                 {filtered.map(m => <MovieCard key={m.id} movie={m} width="100%" onClick={() => setPreview(m)}/>)}
               </div>
           }
@@ -930,16 +1004,137 @@ function MoviePage() {
   if (!movie) return <div style={{ paddingTop: 100 }}><Empty icon="🎬" title="Movie not found"/></div>;
 
   const doBook = async () => {
-    if (!user)          { toast("Please sign in to book tickets", "error"); return; }
+    if (!user)           { toast("Please sign in to book tickets", "error"); return; }
     if (!selSeats.length){ toast("Please select at least one seat", "error"); return; }
     setBooking(true);
     try {
-      const d = await api.post("/api/bookings/initiate", { showId: selShow.id, seatIds: selSeats.map(s => s.seatId) }, token);
-      toast(`🎟 Booking confirmed! Ref: ${d.bookingReference}`, "success");
-      setSelShow(null); setSelSeats([]);
-      navigate("bookings");
-    } catch (e) { toast(e.message || "Booking failed", "error"); }
-    finally { setBooking(false); }
+      // Step 1: initiate booking → backend creates Stripe PaymentIntent, returns clientSecret
+      const d = await api.post("/api/bookings/initiate", {
+        showId:  selShow.id,
+        seatIds: selSeats.map(s => s.seatId),
+      }, token);
+
+      // Step 2: load Stripe.js
+      const stripe = await new Promise((resolve, reject) => {
+        if (window.Stripe) { resolve(window.Stripe(d.stripePublishableKey)); return; }
+        const script = document.createElement("script");
+        script.src = "https://js.stripe.com/v3/";
+        script.onload = () => resolve(window.Stripe(d.stripePublishableKey));
+        script.onerror = () => reject(new Error("Failed to load Stripe.js"));
+        document.body.appendChild(script);
+      });
+
+      // Step 3: create Stripe Elements with UPI + Card support
+      // currency:"inr" + automatic_payment_methods on the PaymentIntent
+      // makes Stripe surface UPI, Cards, Netbanking as tabs automatically
+      const elements = stripe.elements({
+        clientSecret: d.stripeClientSecret,
+        appearance: {
+          theme: "night",
+          variables: {
+            colorPrimary: "#e50914",
+            colorBackground: "#1a1a1a",
+            colorText: "#ffffff",
+            colorDanger: "#e50914",
+            fontFamily: "inherit",
+            borderRadius: "8px",
+          },
+        },
+      });
+      const paymentElement = elements.create("payment", {
+        layout: "tabs",   // Card / UPI / Netbanking shown as separate tabs
+        defaultValues: { billingDetails: { name: user.name, email: user.email } },
+        fields: { billingDetails: { email: "auto", name: "auto" } },
+      });
+
+      // Build a simple modal to host the Stripe payment element
+      const overlay = document.createElement("div");
+      overlay.style.cssText = `
+        position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;
+        display:flex;align-items:center;justify-content:center;
+      `;
+      const modal = document.createElement("div");
+      modal.style.cssText = `
+        background:#1a1a1a;border-radius:12px;padding:32px;width:460px;max-width:95vw;
+        border:1px solid #333;box-shadow:0 25px 60px rgba(0,0,0,.6);
+      `;
+      modal.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+          <h2 style="color:#fff;margin:0;font-size:18px">Complete Payment</h2>
+          <button id="stripe-close" style="background:none;border:none;color:#888;font-size:22px;cursor:pointer;line-height:1">✕</button>
+        </div>
+        <div style="color:#aaa;font-size:13px;margin-bottom:20px">
+          ${d.movieTitle || "Movie"} · ₹${d.finalAmount?.toFixed(2)}
+        </div>
+        <div id="stripe-element-mount"></div>
+        <div id="stripe-error" style="color:#e50914;font-size:13px;margin-top:12px;min-height:18px"></div>
+        <button id="stripe-pay-btn" style="
+          margin-top:20px;width:100%;padding:14px;background:#e50914;color:#fff;
+          border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;
+        ">Pay ₹${d.finalAmount?.toFixed(2)}</button>
+      `;
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+      paymentElement.mount("#stripe-element-mount");
+
+      // Wait for user to pay or close
+      await new Promise((resolve, reject) => {
+        document.getElementById("stripe-close").onclick = () => {
+          overlay.remove();
+          reject(new Error("Payment cancelled"));
+        };
+
+        document.getElementById("stripe-pay-btn").onclick = async () => {
+          const btn = document.getElementById("stripe-pay-btn");
+          const errDiv = document.getElementById("stripe-error");
+          btn.disabled = true;
+          btn.textContent = "Processing...";
+          errDiv.textContent = "";
+
+          const { error, paymentIntent } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+              return_url: window.location.href, // fallback for redirect-based methods
+              payment_method_data: {
+                billing_details: { name: user.name, email: user.email },
+              },
+            },
+            redirect: "if_required",
+          });
+
+          if (error) {
+            errDiv.textContent = error.message;
+            btn.disabled = false;
+            btn.textContent = `Pay ₹${d.finalAmount?.toFixed(2)}`;
+            return;
+          }
+
+          if (paymentIntent?.status === "succeeded") {
+            overlay.remove();
+            try {
+              // Step 4: verify with backend → confirm booking
+              await api.post("/api/bookings/confirm", {
+                bookingId:             d.id,
+                stripePaymentIntentId: paymentIntent.id,
+              }, token);
+              toast(`🎟 Booking confirmed! Ref: ${d.bookingReference}`, "success");
+              setSelShow(null); setSelSeats([]);
+              navigate("bookings");
+              resolve();
+            } catch(e) { reject(e); }
+          } else {
+            errDiv.textContent = "Payment incomplete. Please try again.";
+            btn.disabled = false;
+            btn.textContent = `Pay ₹${d.finalAmount?.toFixed(2)}`;
+          }
+        };
+      });
+
+    } catch (e) {
+      if (e.message !== "Payment cancelled") {
+        toast(e.message || "Booking failed", "error");
+      }
+    } finally { setBooking(false); }
   };
 
   const totalAmt = selSeats.reduce((s, seat) => s + seat.price, 0);
@@ -955,12 +1150,12 @@ function MoviePage() {
 
   return (
     <div className="fade-in">
-      <div style={{ position: "relative", height: "60vh", overflow: "hidden" }}>
+      <div style={{ position: "relative", height: "clamp(340px, 60vh, 600px)", overflow: "hidden" }}>
         {movie.posterUrl && <img src={movie.posterUrl} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 18%", filter: "brightness(.3)" }}/>}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(6,6,6,.12) 0%, #060606 100%)" }}/>
-        <div style={{ position: "absolute", bottom: 0, left: 0, padding: "0 56px 40px", display: "flex", gap: 34, alignItems: "flex-end" }}>
+        <div className="movie-hero-inner" style={{ position: "absolute", bottom: 0, left: 0, padding: "0 56px 40px", display: "flex", gap: 34, alignItems: "flex-end" }}>
           {movie.posterUrl && (
-            <img src={movie.posterUrl} alt={movie.title} style={{ width: 158, height: 237, objectFit: "cover", borderRadius: 12, boxShadow: "0 24px 64px rgba(0,0,0,.95)", flexShrink: 0, border: "1px solid rgba(255,255,255,.07)" }}/>
+            <img src={movie.posterUrl} alt={movie.title} className="movie-hero-poster" style={{ width: 158, height: 237, objectFit: "cover", borderRadius: 12, boxShadow: "0 24px 64px rgba(0,0,0,.95)", flexShrink: 0, border: "1px solid rgba(255,255,255,.07)" }}/>
           )}
           <div style={{ paddingBottom: 6 }}>
             <BackButton/>
@@ -969,7 +1164,7 @@ function MoviePage() {
               {movie.genre       && <span style={{ border: "1px solid #282828", color: "#bbb", fontSize: 12, padding: "3px 10px", borderRadius: 4 }}>{movie.genre}</span>}
               {movie.language    && <span style={{ border: "1px solid #282828", color: "#bbb", fontSize: 12, padding: "3px 10px", borderRadius: 4 }}>{movie.language}</span>}
             </div>
-            <h1 className="display" style={{ fontSize: "clamp(30px, 5vw, 60px)", lineHeight: 1, marginBottom: 14 }}>{movie.title}</h1>
+            <h1 className="display" style={{ fontSize: "clamp(26px, 5vw, 60px)", lineHeight: 1, marginBottom: 14 }}>{movie.title}</h1>
             <div style={{ display: "flex", gap: 20, color: "#888", fontSize: 14, flexWrap: "wrap", marginBottom: 12 }}>
               {movie.rating          && <span style={{ color: "#f5c518", fontWeight: 800, display: "flex", alignItems: "center", gap: 5 }}><ICONS.Star s={14} color="#f5c518"/>{movie.rating.toFixed(1)}</span>}
               {movie.durationMinutes && <span style={{ display: "flex", alignItems: "center", gap: 5 }}><ICONS.Clock s={13}/>{movie.durationMinutes} min</span>}
@@ -981,13 +1176,13 @@ function MoviePage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 56px 80px" }}>
+      <div className="movie-page-body" style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 56px 80px" }}>
         {/* Date selector */}
         <div style={{ marginBottom: 28 }}>
           <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}><ICONS.Calendar s={20}/> Select Date</h2>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 10, overflowX: "auto", paddingBottom: 4, WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}>
             {dates.map(d => (
-              <button key={d.val} className={`btn btn-sm ${date === d.val ? "btn-red" : "btn-outline"}`} onClick={() => setDate(d.val)}>{d.label}</button>
+              <button key={d.val} className={`btn btn-sm ${date === d.val ? "btn-red" : "btn-outline"}`} style={{ flexShrink: 0 }} onClick={() => setDate(d.val)}>{d.label}</button>
             ))}
           </div>
         </div>
@@ -1010,7 +1205,7 @@ function MoviePage() {
                       style={{
                         background: selShow?.id === show.id ? "rgba(229,9,20,.06)" : "#0a0a0a",
                         border: `1.5px solid ${selShow?.id === show.id ? "#e50914" : "#181818"}`,
-                        borderRadius: 14, padding: "18px 24px", cursor: "pointer",
+                        borderRadius: 14, padding: "clamp(14px,3vw,18px) clamp(14px,3vw,24px)", cursor: "pointer",
                         transition: "all .22s", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 14,
                       }}
                       onMouseEnter={e => { if (selShow?.id !== show.id) e.currentTarget.style.borderColor = "#2e2e2e"; }}
@@ -1061,7 +1256,7 @@ function MoviePage() {
               <SeatMap showId={selShow.id} onSeatsChange={setSelSeats}/>
             </div>
             {selSeats.length > 0 && (
-              <div className="slide-up" style={{
+              <div className="slide-up booking-bar" style={{
                 marginTop: 24, background: "#0a0a0a", border: "1.5px solid #e50914",
                 borderRadius: 16, padding: "22px 30px", display: "flex",
                 justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20,
@@ -1104,10 +1299,10 @@ function BookingsPage() {
   }, []);
 
   return (
-    <div style={{ maxWidth: 920, margin: "0 auto", padding: "90px 52px 80px" }}>
+    <div className="bookings-page" style={{ maxWidth: 920, margin: "0 auto", padding: "90px 52px 80px" }}>
       <BackButton/>
       <div style={{ marginBottom: 40 }}>
-        <h1 className="display" style={{ fontSize: 58, letterSpacing: 3, marginBottom: 4 }}>MY BOOKINGS</h1>
+        <h1 className="display" style={{ fontSize: "clamp(36px, 6vw, 58px)", letterSpacing: 3, marginBottom: 4 }}>MY BOOKINGS</h1>
         <p style={{ color: "#444", fontSize: 14 }}>{bookings.length} booking{bookings.length !== 1 ? "s" : ""} total</p>
       </div>
       {loading ? <Spinner/> : bookings.length === 0
@@ -1125,7 +1320,7 @@ function BookingsPage() {
                   </div>
                   <StatusBadge status={b.status}/>
                 </div>
-                <div style={{ display: "flex", gap: 36, flexWrap: "wrap" }}>
+                <div className="booking-card-details" style={{ display: "flex", gap: 36, flexWrap: "wrap" }}>
                   {[
                     ["BOOKING REF", b.bookingReference, "#e50914", "monospace"],
                     ["SEATS",       b.seats?.join(", "), "#ddd",    "inherit"],
@@ -1401,7 +1596,7 @@ function AddTheatreForm({ onSuccess }) {
               </div>
 
               {/* Name / type / total seats */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 14 }}>
+              <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 14 }}>
                 <Field label="Screen Name *">
                   <input className="inp" placeholder="e.g. Audi 1" value={scr.name} onChange={setScreenField(idx, "name")} style={{ fontSize: 13 }}/>
                 </Field>
@@ -1418,7 +1613,7 @@ function AddTheatreForm({ onSuccess }) {
               {/* Seat breakdown */}
               <div>
                 <p style={{ color: "#404040", fontSize: 11, fontWeight: 700, letterSpacing: 1, marginBottom: 10 }}>SEAT BREAKDOWN (by type)</p>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+                <div className="grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
                   {SEAT_TYPES.map(key => (
                     <div key={key}>
                       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
@@ -1494,22 +1689,22 @@ function AdminPage() {
   };
 
   return (
-    <div style={{ paddingTop: 78, minHeight: "100vh" }}>
+    <div style={{ paddingTop: 60, minHeight: "100vh" }}>
       {/* Header */}
-      <div style={{
+      <div className="admin-header" style={{
         background: "linear-gradient(135deg, rgba(229,9,20,.06) 0%, transparent 60%)",
-        borderBottom: "1px solid rgba(229,9,20,.1)", padding: "28px 52px 24px",
+        borderBottom: "1px solid rgba(229,9,20,.1)", padding: "28px var(--gutter) 24px",
         display: "flex", alignItems: "center", gap: 20,
       }}>
         <div style={{ background: "linear-gradient(135deg,#b00710,#e50914)", borderRadius: 14, padding: "12px 14px", display: "flex", boxShadow: "0 8px 24px rgba(229,9,20,.3)" }}>
           <ICONS.Shield s={26}/>
         </div>
         <div>
-          <h1 className="display" style={{ fontSize: 50, letterSpacing: 3, marginBottom: 2 }}>ADMIN DASHBOARD</h1>
+          <h1 className="display" style={{ fontSize: "clamp(28px, 5vw, 50px)", letterSpacing: 3, marginBottom: 2 }}>ADMIN DASHBOARD</h1>
           <p style={{ color: "#444", fontSize: 14 }}>Manage your CineBook platform</p>
         </div>
         {/* Quick stats */}
-        <div style={{ marginLeft: "auto", display: "flex", gap: 20 }}>
+        <div className="admin-stats" style={{ marginLeft: "auto", display: "flex", gap: 20 }}>
           {[
             { label: "Movies",   val: movies.length,                                                              icon: <ICONS.Film     s={16}/> },
             { label: "Theatres", val: theatres.length,                                                            icon: <ICONS.Building s={16}/> },
@@ -1526,9 +1721,9 @@ function AdminPage() {
         </div>
       </div>
 
-      <div style={{ display: "flex", gap: 0, maxWidth: 1200, margin: "0 auto", padding: "0 52px 80px" }}>
+      <div className="admin-layout" style={{ display: "flex", gap: 0, maxWidth: 1200, margin: "0 auto", padding: "0 var(--gutter) 80px" }}>
         {/* Sidebar */}
-        <div style={{ width: 200, flexShrink: 0, paddingTop: 32 }}>
+        <div className="admin-sidebar" style={{ width: 200, flexShrink: 0, paddingTop: 32 }}>
           {TABS.map(t => (
             <button key={t.id} onClick={() => setTab(t.id)} style={{
               display: "flex", alignItems: "center", gap: 10, width: "100%",
@@ -1550,7 +1745,7 @@ function AdminPage() {
         </div>
 
         {/* Content */}
-        <div style={{ flex: 1, paddingLeft: 36, paddingTop: 32 }}>
+        <div className="admin-content" style={{ flex: 1, paddingLeft: 36, paddingTop: 32 }}>
 
           {/* ── MOVIES TAB ── */}
           {tab === "movies" && (
@@ -1696,7 +1891,7 @@ export default function App() {
           <ToastProvider>
             <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
               <Navbar onAuthOpen={() => setShowAuth(true)}/>
-              <div style={{ paddingTop: 68 }}>
+              <div style={{ paddingTop: 60 }}>
                 <PageRouter onAuthRequired={() => setShowAuth(true)}/>
               </div>
               {showAuth && <AuthModal onClose={() => setShowAuth(false)}/>}
